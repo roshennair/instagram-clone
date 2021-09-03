@@ -1,21 +1,86 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import firebase from 'firebase/app';
+import Landing from './components/auth/Landing';
+import Register from './components/auth/Register';
+import Login from './components/auth/Login';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+const firebaseConfig = {
+	apiKey: "AIzaSyBL4fD7AP79JRFJDj1StlpnE-XE9wyssS4",
+	authDomain: "instagram-clone-45d19.firebaseapp.com",
+	projectId: "instagram-clone-45d19",
+	storageBucket: "instagram-clone-45d19.appspot.com",
+	messagingSenderId: "1089106267471",
+	appId: "1:1089106267471:web:757d0da8e311ac86d9893a",
+	measurementId: "G-QQZMV3SKTS"
+};
+if (firebase.apps.length === 0) {
+	firebase.initializeApp(firebaseConfig)
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const Stack = createStackNavigator();
+
+export default class App extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			loaded: false
+		}
+	}
+
+	componentDidMount() {
+		firebase.auth().onAuthStateChanged(user => {
+			if (!user) { // not logged in
+				this.setState({
+					loggedIn: false,
+					loaded: true
+				});
+			} else { // logged in
+				this.setState({
+					loggedIn: true,
+					loaded: true
+				});
+			}
+		});
+	}
+
+	render() {
+		const { loggedIn, loaded } = this.state;
+
+		if (!loaded) {
+			return (
+				<View style={{ flex: 1, justifyContent: 'center' }}>
+					<Text>Loading...</Text>
+				</View>
+			);
+		}
+
+		if (!loggedIn) {
+			return (
+				<NavigationContainer>
+					<Stack.Navigator initialRouteName="Landing">
+						<Stack.Screen
+							name="Landing"
+							component={Landing}
+							options={{ headerShown: false }} />
+						<Stack.Screen
+							name="Register"
+							component={Register} />
+						<Stack.Screen
+							name="Login"
+							component={Login} />
+					</Stack.Navigator>
+				</NavigationContainer>
+			);
+		}
+
+		return (
+			<View style={{ flex: 1, justifyContent: 'center' }}>
+				<Text>User is logged in</Text>
+			</View>
+		);
+	}
+}
