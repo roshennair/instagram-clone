@@ -12,6 +12,7 @@ import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import rootReducer from './redux/reducers/index';
 import Main from './components/Main';
+import Add from './components/main/Add';
 
 const firebaseConfig = {
 	apiKey: "AIzaSyBL4fD7AP79JRFJDj1StlpnE-XE9wyssS4",
@@ -25,8 +26,8 @@ const firebaseConfig = {
 if (firebase.apps.length === 0) {
 	firebase.initializeApp(firebaseConfig)
 }
-const Stack = createStackNavigator();
 const store = createStore(rootReducer, applyMiddleware(thunk));
+const Stack = createStackNavigator();
 
 export default class App extends Component {
 	constructor(props) {
@@ -85,7 +86,17 @@ export default class App extends Component {
 
 		return (
 			<Provider store={store}>
-				<Main />
+				<NavigationContainer>
+					<Stack.Navigator initialRouteName="Main">
+						<Stack.Screen
+							name="Main"
+							component={Main}
+							options={{ headerShown: false }} />
+						<Stack.Screen
+							name="Add"
+							component={Add} />
+					</Stack.Navigator>
+				</NavigationContainer>
 			</Provider>
 		);
 	}
