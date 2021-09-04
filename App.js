@@ -3,9 +3,15 @@ import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import firebase from 'firebase/app';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+
 import Landing from './components/auth/Landing';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
+import rootReducer from './redux/reducers/index';
+import Main from './components/Main';
 
 const firebaseConfig = {
 	apiKey: "AIzaSyBL4fD7AP79JRFJDj1StlpnE-XE9wyssS4",
@@ -19,8 +25,8 @@ const firebaseConfig = {
 if (firebase.apps.length === 0) {
 	firebase.initializeApp(firebaseConfig)
 }
-
 const Stack = createStackNavigator();
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export default class App extends Component {
 	constructor(props) {
@@ -78,9 +84,9 @@ export default class App extends Component {
 		}
 
 		return (
-			<View style={{ flex: 1, justifyContent: 'center' }}>
-				<Text>User is logged in</Text>
-			</View>
+			<Provider store={store}>
+				<Main />
+			</Provider>
 		);
 	}
 }
