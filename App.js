@@ -7,12 +7,13 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
+import rootReducer from './redux/reducers/index';
 import Landing from './components/auth/Landing';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
-import rootReducer from './redux/reducers/index';
 import Main from './components/Main';
 import Add from './components/main/Add';
+import Save from './components/main/Save';
 
 const firebaseConfig = {
 	apiKey: "AIzaSyBL4fD7AP79JRFJDj1StlpnE-XE9wyssS4",
@@ -95,6 +96,9 @@ export default class App extends Component {
 						<Stack.Screen
 							name="Add"
 							component={Add} />
+						<Stack.Screen
+							name="Save"
+							component={Save} />
 					</Stack.Navigator>
 				</NavigationContainer>
 			</Provider>
