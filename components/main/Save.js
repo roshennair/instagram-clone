@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { View, TextInput, Image, Button } from 'react-native';
 import firebase from 'firebase/app';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchUserPosts } from '../../redux/actions/index';
 
-const Save = ({ route, navigation }) => {
+const Save = ({ route, navigation, fetchUserPosts }) => {
 	const { image } = route.params;
 	const [caption, setCaption] = useState('');
 
@@ -43,6 +45,7 @@ const Save = ({ route, navigation }) => {
 		const taskCompleted = () => {
 			task.snapshot.ref.getDownloadURL().then(url => {
 				savePostData(url);
+				fetchUserPosts()
 			});
 		}
 
@@ -67,5 +70,6 @@ const Save = ({ route, navigation }) => {
 	)
 }
 const mapStateToProps = ({ user }) => ({ currentUser: user.currentUser });
+const mapDispatchToProps = dispatch => bindActionCreators({ fetchUserPosts }, dispatch);
 
-export default connect(mapStateToProps, null)(Save);
+export default connect(mapStateToProps, mapDispatchToProps)(Save);

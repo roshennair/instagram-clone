@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchUser } from '../redux/actions';
+import { fetchUser, fetchUserPosts } from '../redux/actions';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feed from './main/Feed';
@@ -14,6 +14,7 @@ const Empty = () => null;
 class Main extends Component {
 	componentDidMount() {
 		this.props.fetchUser();
+		this.props.fetchUserPosts();
 	}
 
 	render() {
@@ -59,6 +60,6 @@ class Main extends Component {
 }
 
 const mapStateToProps = ({ user }) => ({ currentUser: user.currentUser });
-const mapDispatchToProps = dispatch => bindActionCreators({ fetchUser }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ fetchUser, fetchUserPosts }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
