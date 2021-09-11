@@ -6,6 +6,8 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feed from './main/Feed';
 import Profile from './main/Profile';
+import Search from './main/Search';
+import firebase from 'firebase/app';
 
 const Tab = createMaterialBottomTabNavigator();
 const Empty = () => null;
@@ -32,6 +34,14 @@ class Main extends Component {
 						)
 					}} />
 				<Tab.Screen
+					name="Search"
+					component={Search}
+					options={{
+						tabBarIcon: ({ color }) => (
+							<Icon name="magnify" color={color} size={26} />
+						)
+					}} />
+				<Tab.Screen
 					name="AddContainer"
 					component={Empty}
 					listeners={({ navigation }) => ({
@@ -49,6 +59,12 @@ class Main extends Component {
 				<Tab.Screen
 					name="Profile"
 					component={Profile}
+					listeners={({ navigation }) => ({
+						tabPress: e => { // Open new screen on tab press
+							e.preventDefault();
+							navigation.navigate("Profile", { uid: firebase.auth().currentUser.uid });
+						}
+					})}
 					options={{
 						tabBarIcon: ({ color }) => (
 							<Icon name="account-circle" color={color} size={26} />

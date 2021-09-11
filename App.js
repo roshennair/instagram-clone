@@ -91,8 +91,7 @@ export default class App extends Component {
 					<Stack.Navigator initialRouteName="Main">
 						<Stack.Screen
 							name="Main"
-							component={Main}
-							options={{ headerShown: false }} />
+							component={Main} />
 						<Stack.Screen
 							name="Add"
 							component={Add} />

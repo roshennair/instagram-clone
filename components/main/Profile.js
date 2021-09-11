@@ -1,8 +1,47 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Image, FlatList } from 'react-native'
 import { connect } from 'react-redux';
+import firebase from 'firebase';
+require('firebase/firestore');
 
-const Profile = ({ currentUser, posts }) => {
+const Profile = ({ currentUser, posts, route }) => {
+	const { uid } = route.params;
+
+	const [userPosts, setUserPosts] = useState([]);
+	const [user, setUser] = useState(null);
+
+	useEffect(() => {
+		if (uid === firebase.auth().currentUser.uid) {
+			setUser(currentUser);
+			setUserPosts(posts);
+		} else {
+			firebase.firestore().collection("users")
+				.doc(uid)
+				.get()
+				.then(snapshot => {
+					if (snapshot.exists) {
+						setUser(snapshot.data());
+					} else {
+						console.log("User does not exist");
+					}
+				});
+
+			firebase.firestore().collection('posts')
+				.doc(uid)
+				.collection('userPosts')
+				.orderBy('created', 'desc')
+				.get()
+				.then(snapshot => {
+					const posts = snapshot.docs.map(doc => {
+						const data = doc.data();
+						const id = doc.id;
+						return { id, ...data }
+					});
+					setUserPosts(posts);
+				})
+		}
+	}, [uid]);
+
 	const renderPost = ({ item: post }) => {
 		return (
 			<View style={styles.imageContainer}>
@@ -13,18 +52,18 @@ const Profile = ({ currentUser, posts }) => {
 
 	return (
 		<View style={styles.container}>
-			{currentUser &&
+			{user &&
 				<View style={styles.userContainer}>
-					<Text>{currentUser.name}</Text>
-					<Text>{currentUser.email}</Text>
+					<Text>{user.name}</Text>
+					<Text>{user.email}</Text>
 				</View>
 			}
-			{posts &&
+			{userPosts &&
 				<View style={styles.galleryContainer}>
 					<FlatList
 						numColumns={3}
 						horizontal={false}
-						data={posts}
+						data={userPosts}
 						renderItem={renderPost}
 						keyExtractor={post => post.id} />
 				</View>
@@ -35,8 +74,7 @@ const Profile = ({ currentUser, posts }) => {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		marginTop: 40
+		flex: 1
 	},
 	userContainer: {
 		margin: 20
