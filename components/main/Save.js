@@ -20,7 +20,6 @@ const Save = ({ route, navigation, fetchUserPosts }) => {
 				created: firebase.firestore.FieldValue.serverTimestamp()
 			})
 			.then(() => {
-				console.log('Done saving post')
 				navigation.popToTop()
 			});
 	}

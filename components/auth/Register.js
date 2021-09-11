@@ -23,7 +23,6 @@ export default class Register extends Component {
 				firebase.firestore().collection('users')
 					.doc(firebase.auth().currentUser.uid)
 					.set({ name, email });
-				console.log(result);
 			})
 			.catch(err => console.log(err));
 	}

@@ -17,9 +17,7 @@ export default class Login extends Component {
 
 	onLogin() {
 		const { email, password } = this.state;
-		firebase.auth().signInWithEmailAndPassword(email, password)
-			.then(result => console.log(result))
-			.catch(err => console.log(err));
+		firebase.auth().signInWithEmailAndPassword(email, password);
 	}
 
 	render() {
