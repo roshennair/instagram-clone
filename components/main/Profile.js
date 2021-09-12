@@ -53,7 +53,6 @@ const Profile = ({ currentUser, posts, following, route }) => {
 		);
 	}
 
-	// TODO
 	const onFollow = () => {
 		firebase.firestore()
 			.collection('following')
@@ -64,8 +63,6 @@ const Profile = ({ currentUser, posts, following, route }) => {
 			.then(() => setIsFollowing(true));
 	}
 
-
-	// TODO
 	const onUnfollow = () => {
 		firebase.firestore()
 			.collection('following')
