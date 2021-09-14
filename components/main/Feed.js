@@ -14,7 +14,6 @@ const Feed = ({ following, users, usersLoaded }) => {
 			}
 
 			posts.sort((a, b) => a.created.toDate() - b.created.toDate());
-			console.log(posts);
 			setPosts(posts);
 		}
 	}, [usersLoaded]);

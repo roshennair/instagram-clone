@@ -73,6 +73,10 @@ const Profile = ({ currentUser, posts, following, route }) => {
 			.then(() => setIsFollowing(false));
 	}
 
+	const onLogout = () => {
+		firebase.auth().signOut();
+	}
+
 	return (
 		<View style={styles.container}>
 			{user &&
@@ -101,7 +105,7 @@ const Profile = ({ currentUser, posts, following, route }) => {
 									}
 								</View>
 							)
-							: null
+							: <Button title="Logout" onPress={onLogout} />
 					}
 				</View>
 			}
